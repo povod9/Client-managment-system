@@ -36,12 +36,12 @@ public class ClientService {
 
 
     public Client createClient(
-            Long id,
             Client clientToCreate
     ) {
         if(clientToCreate == null){
             throw new NullPointerException("Client cannot be null");
         }
+
 
         if(clientToCreate.payment() != null){
             throw new IllegalArgumentException("For create a new client payment must be empty");

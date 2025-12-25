@@ -43,13 +43,12 @@ public class ClientController {
         return ResponseEntity.status(200).body(clientById);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Client> creatClient(
-            @PathVariable("id") Long id,
             @RequestBody Client clientToCreate
     ){
         log.info("Called method createClient");
-        var client = service.createClient(id, clientToCreate);
+        var client = service.createClient(clientToCreate);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(client);
     }
