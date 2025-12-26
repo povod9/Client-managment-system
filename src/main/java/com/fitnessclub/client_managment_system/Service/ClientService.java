@@ -55,8 +55,8 @@ public class ClientService {
                 clientToCreate.subscription(),
                 SubscriptionPayment.PENDING
         );
-
-        return clients.put(createdClient.id(), createdClient);
+        clients.put(createdClient.id(), createdClient);
+        return createdClient;
     }
 
     public void deleteClientById(
@@ -91,5 +91,24 @@ public class ClientService {
         );
         clients.put(client.id(), updated);
         return updated;
+    }
+
+    public Client approvePaymentById(
+            Long id
+    ) {
+        if(!clients.containsKey(id)){
+            throw new NoSuchElementException("Not found client by id=" + id);
+        }
+        var client = clients.get(id);
+        var approved = new Client(
+                client.id(),
+                client.firstName(),
+                client.lastName(),
+                client.email(),
+                client.subscription(),
+                SubscriptionPayment.PAYED
+        );
+
+        return clients.put(client.id(), approved);
     }
 }

@@ -74,4 +74,13 @@ public class ClientController {
                 .build();
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Client> approvePaymentById(
+            @PathVariable("id") Long id
+    ){
+        log.info("Called method approvePaymentById: id=" + id);
+        var approved = service.approvePaymentById(id);
+        return ResponseEntity.status(200).body(approved);
+    }
+
 }
