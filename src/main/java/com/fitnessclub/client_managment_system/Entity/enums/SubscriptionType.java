@@ -1,4 +1,4 @@
-package com.fitnessclub.client_managment_system.Entity;
+package com.fitnessclub.client_managment_system.Entity.enums;
 
 public enum SubscriptionType {
     MONTH,
