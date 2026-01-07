@@ -18,34 +18,29 @@ public class ClientUiController {
         this.service = service;
     }
 
-    // Главная страница со всеми клиентами
     @GetMapping("/clients")
     public String listClients(Model model) {
         model.addAttribute("clients", service.getAllClient()); //
         return "clients";
     }
 
-    // Форма создания нового клиента
     @GetMapping("/clients/new")
     public String createForm(Model model) {
         return "create-client";
     }
 
-    // Обработка создания
     @PostMapping("/clients")
     public String saveClient(@ModelAttribute Client client) {
         service.createClient(client); //
         return "redirect:/ui/clients";
     }
 
-    // Кнопка подтверждения оплаты
     @PostMapping("/clients/{id}/approve")
     public String approve(@PathVariable Long id) {
         service.approvePaymentById(id); //
         return "redirect:/ui/clients";
     }
 
-    // Кнопка отмены
     @PostMapping("/clients/{id}/cancel")
     public String cancel(@PathVariable Long id) {
         service.cancelClientPayment(id); //
