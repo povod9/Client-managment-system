@@ -5,6 +5,9 @@ import com.fitnessclub.client_managment_system.Entity.ClientEntity;
 import com.fitnessclub.client_managment_system.Entity.ClientRepository;
 import com.fitnessclub.client_managment_system.Entity.enums.SubscriptionPayment;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 @Service
 public class ClientService {
 
+    private static final Logger log = LoggerFactory.getLogger(ClientService.class);
 
     private final ClientRepository repository;
 
@@ -41,8 +45,13 @@ public class ClientService {
     public Client createClient(
             Client clientToCreate
     ) {
+
         if(clientToCreate == null){
             throw new NullPointerException("Client cannot be null");
+        }
+
+        if(clientToCreate.id() != null){
+            throw new IllegalArgumentException("Id should be empty");
         }
 
         var allEntity = repository.findAll();
@@ -75,8 +84,9 @@ public class ClientService {
         var clientEntity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found client by id=" + id));
 
-        if(clientEntity.getPayment() != SubscriptionPayment.PAYED){
-            throw new IllegalArgumentException("Cannot modify subscription already payed: " + clientEntity.getPayment());
+
+        if(clientEntity.getPayment() != SubscriptionPayment.PENDING){
+            throw new IllegalStateException("Cannot modify subscription already: " + clientEntity.getPayment());
         }
         var updated = new ClientEntity(
                 clientEntity.getId(),
@@ -91,13 +101,16 @@ public class ClientService {
         return toDomainClient(saved);
     }
 
-    public void deleteClientById(
+    @Transactional
+    public void cancelClientPayment(
             Long id
     ) {
         var clientEntity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found client by id=" + id));
 
-        repository.delete(clientEntity);
+        repository.setPayment(id, SubscriptionPayment.CANCEL);
+        log.info("Successfully canceled payment: id={}", id);
+
     }
 
     public Client approvePaymentById(

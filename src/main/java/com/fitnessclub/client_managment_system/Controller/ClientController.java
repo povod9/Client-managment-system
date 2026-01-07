@@ -64,17 +64,17 @@ public class ClientController {
         return ResponseEntity.status(200).body(updatedClient);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClientById(
+    @DeleteMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelClientPayment(
             @PathVariable("id") Long id
     ){
         log.info("Called method deleteClientById id=" + id);
-        service.deleteClientById(id);
+        service.cancelClientPayment(id);
         return ResponseEntity.ok()
                 .build();
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/approved")
     public ResponseEntity<Client> approvePaymentById(
             @PathVariable("id") Long id
     ){
