@@ -2,10 +2,12 @@ package com.fitnessclub.client_managment_system.Controller;
 
 import com.fitnessclub.client_managment_system.Entity.Client;
 import com.fitnessclub.client_managment_system.Service.ClientService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +47,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<Client> creatClient(
-            @RequestBody Client clientToCreate
+            @RequestBody @Valid Client clientToCreate
     ){
         log.info("Called method createClient");
         var client = service.createClient(clientToCreate);
@@ -56,7 +58,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(
             @PathVariable Long id,
-            @RequestBody Client clientToUpdate
+            @RequestBody @Valid Client clientToUpdate
     ){
         log.info("Called method updateClient id={}, updateClient={}", id, clientToUpdate);
 

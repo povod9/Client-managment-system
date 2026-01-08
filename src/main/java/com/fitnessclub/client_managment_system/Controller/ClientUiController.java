@@ -2,6 +2,7 @@ package com.fitnessclub.client_managment_system.Controller;
 
 import com.fitnessclub.client_managment_system.Entity.Client;
 import com.fitnessclub.client_managment_system.Service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class ClientUiController {
     }
 
     @PostMapping("/clients")
-    public String saveClient(@ModelAttribute Client client) {
+    public String saveClient(@Valid @ModelAttribute Client client) {
         service.createClient(client); //
         return "redirect:/ui/clients";
     }
